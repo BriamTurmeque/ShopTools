@@ -197,7 +197,38 @@ class Tools
 {
     string name;
     string funcion;
-
+public:
+    Tools()
+    {
+        name="";
+        funcion="";
+    }
+    Tools(string name,string funcion)
+    {
+        Tools::name=name;
+        Tools::name=funcion;
+    }
+    string getName()
+    {
+        return name;
+    }
+    string getFuncion()
+    {
+        return funcion;
+    }
+    void setName(string name)
+    {
+        Tools::name=name;
+    }
+    void setFuncion(string funcion)
+    {
+        Tools::funcion=funcion;
+    }
+    friend ostream &operator << (ostream &salida, Tools &T)
+    {
+        return salida;
+    }
+    virtual float Price()=0;
 };
 class ManualTools:public Tools
 {
