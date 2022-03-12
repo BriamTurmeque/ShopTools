@@ -199,6 +199,14 @@ class Tools
     string funcion;
 
 };
+class ManualTools:public Tools
+{
+
+};
+class MechanicalTools:public Tools
+{
+
+};
 
 
 
