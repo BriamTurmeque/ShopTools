@@ -193,6 +193,12 @@ friend istream &operator >> (istream &entrada, Date &d){
 
 
 };
+class Tools
+{
+    string name;
+    string funcion;
+
+};
 
 
 
