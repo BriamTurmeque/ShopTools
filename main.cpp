@@ -194,6 +194,11 @@ friend istream &operator >> (istream &entrada, Date &d){
 
 
 };
+
+// esta es la clase abstracta tools -> herramientas
+// esta va a ser la clase padre que va a heredar a todos los tipos de herramientas 
+// tenemos un metodo virtual llamado price, que lo vamos a tener que usar obligatoriamente
+// en todas las clases hijas de esta
 class Tools
 {
     string name;
