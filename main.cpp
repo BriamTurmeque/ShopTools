@@ -145,52 +145,52 @@ class BusinessBuyer: virtual public Buyer,virtual public Person{
 class Date{
     int dia, mes, anio;
     string date;
-public:
-Date(){
-    dia = mes = anio = 0;
-    date = "";
-}
-Date(int dia, int mes, int anio){
-    this->dia = dia;
-    this->mes = mes;
-    this->anio = anio;
-    date = to_string(dia) + "/" + to_string(mes) + "/" + to_string(anio);
-}
-int getDia(){
-    return dia;
-}
-int getMes(){
-    return mes;
-}
-int getAnio(){
-    return anio;
-}
-string getDate(){
-    return date;
-}
-void setDia(int dia){
-    this->dia = dia;
-}
-void setMes(int mes){
-    this->mes = mes;
-}
-void setAnio(int anio){
-    this->anio = anio;
-}
-void setDate(int dia, int mes, int anio){
-    date = to_string(dia) + "/" + to_string(mes) + "/" + to_string(anio);
-}
-friend ostream &operator << (ostream &salida, Date &d){
-    salida << "la fecha es (dd/mm/aaaa): " <<  d.getDate();
-    return salida;
-}
-friend istream &operator >> (istream &entrada, Date &d){
-    d.dia = comprobarIntDia();
-    cout << "Digite el mes: "; entrada >> d.mes;
-    cout << "Digite el anio: "; entrada >> d.anio;
-    d.setDate(d.dia, d.mes, d.anio);
-    return entrada;
-}
+    public:
+    Date(){
+        dia = mes = anio = 0;
+        date = "";
+    }
+    Date(int dia, int mes, int anio){
+        this->dia = dia;
+        this->mes = mes;
+        this->anio = anio;
+        date = to_string(dia) + "/" + to_string(mes) + "/" + to_string(anio);
+    }
+    int getDia(){
+        return dia;
+    }
+    int getMes(){
+        return mes;
+    }
+    int getAnio(){
+        return anio;
+    }
+    string getDate(){
+        return date;
+    }
+    void setDia(int dia){
+        this->dia = dia;
+    }
+    void setMes(int mes){
+        this->mes = mes;
+    }
+    void setAnio(int anio){
+        this->anio = anio;
+    }
+    void setDate(int dia, int mes, int anio){
+        date = to_string(dia) + "/" + to_string(mes) + "/" + to_string(anio);
+    }
+    friend ostream &operator << (ostream &salida, Date &d){
+        salida << "la fecha es (dd/mm/aaaa): " <<  d.getDate();
+        return salida;
+    }
+    friend istream &operator >> (istream &entrada, Date &d){
+        d.dia = comprobarIntDia();
+        cout << "Digite el mes: "; entrada >> d.mes;
+        cout << "Digite el anio: "; entrada >> d.anio;
+        d.setDate(d.dia, d.mes, d.anio);
+        return entrada;
+    }
 
 
 };
@@ -199,20 +199,35 @@ friend istream &operator >> (istream &entrada, Date &d){
 // esta va a ser la clase padre que va a heredar a todos los tipos de herramientas 
 // tenemos un metodo virtual llamado price, que lo vamos a tener que usar obligatoriamente
 // en todas las clases hijas de esta
-class Tools
+class Tools     
 {
-    string name;
-    string funcion;
+
+// ---------------------
+// falta añadir la asociacion de la fecha de compra, cuando se cree esa clase se va a crear la asociacion;
+// --------------------
+    string name, funcion;
+    float price;
+    Date* fecha;
 public:
     Tools()
     {
         name="";
         funcion="";
-    }
-    Tools(string name,string funcion)
+        price=0.0;
+        fecha = new Date();
+        }
+    Tools(string name,string funcion, float price, Date* fecha)
     {
         Tools::name=name;
         Tools::name=funcion;
+        Tools::price = price;
+        Tools::fecha = fecha;
+    }
+    float getPrice(){
+        return price;
+    }
+    void setPrice(float price){
+        Tools::price = price;
     }
     string getName()
     {
@@ -230,18 +245,41 @@ public:
     {
         Tools::funcion=funcion;
     }
-    friend ostream &operator << (ostream &salida, Tools &T)
+
+    virtual string getTipo() = 0;
+    virtual float Price()=0;
+    friend ostream &operator << (ostream &salida, Tools &t)
     {
+        salida << t.getTipo() << "\nNombre: " << t.name << "\nFuncion: " << t.funcion << "\nPrecio: " << t.getPrice();
+        // tengo problemas al tratar de mostrar la fecha, ya tengo sobrecargado el cout para 
+        // mostrar las fechas, pero no me lo esta tomando, se arreglara proximamente 
+        // salida << "\nFecha de adquisicion: "; salida << fecha << endl;
+        salida << "\nFecha adquision(DD/MM/AAAA): " << t.fecha->getDia() << "/" << t.fecha->getMes() << "/" << t.fecha->getAnio() << endl;   
         return salida;
     }
-    virtual float Price()=0;
 };
+
 class ManualTools:public Tools
 {
+    float iva;
+public:
+ManualTools():Tools(){
+    ManualTools::iva = 0.19;
+}
+ManualTools(string name,string funcion, float price, Date* fecha,float iva): Tools(name,funcion,price,fecha){
+    ManualTools::iva = iva;
+}
+string getTipo() override {
+    return "Herramienta manual";}
 
+float Price() override {
+    float precio = getPrice() * (1 + iva);
+    return precio;
+}
 };
 class MechanicalTools:public Tools
 {
+string getTIpo(){return "Herramienta Mecanica";}
 
 };
 
@@ -249,9 +287,11 @@ class MechanicalTools:public Tools
 
 int main (){
     system("cls");
-    Date d;
-    cin >> d;
-    cout << endl << d << endl;
-    cout << "----> ESTO ESTA CORRIENDO UNA BELLEZA <-----";
+    Date* d = new Date(01,12,2003);
+    // estamos teniendo problemas con la creacion del objeto de ManualTools, proximamente lo arreglaremos
+    // ManualTools m = ManualTools("martillo" , "martillar" , 20500 , d, 0.19);
+    
+    ManualTools* mm = new ManualTools("martillo" , "martillar" , 20500 , d , 0.19); 
+    cout << mm;
     return 0;
 }
