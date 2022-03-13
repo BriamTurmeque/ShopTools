@@ -293,15 +293,31 @@ class MechanicalTools:public Tools
 };
 
 
+class Purshaced{
+    vector <Tools> purshacedTools;
+public:
+    Purshaced(){
+        purshacedTools = {};
+        }
+    purshacedTools(vector <Tools*> purshacedTools){
+    Purshaced::purshacedTools = purshacedTools;}
+    void agregarHerramientas(Tools h){
+    purshacedTools.push_back(h);
+    }
+
+};
+
 int main (){
     system("cls");
+    vector <Tools> herramientasCompradas = {};
+
     Date* fechaAdquision = new Date(01,12,2003);
-    // estamos teniendo problemas con la creacion del objeto de ManualTools, proximamente lo arreglaremos
-    // ManualTools m = ManualTools("martillo" , "martillar" , 20500 , d, 0.19);
-    fflush(stdin);
     ManualTools mm = ManualTools("martillo" , "martillar" , 10000 , fechaAdquision , 0.19);
-    cout << mm << endl << endl;
     MechanicalTools mc = MechanicalTools ("carretilla" , "cargar con lo que se le de la gana" , 50000 , fechaAdquision , 0.19);
-    cout << mc;
+
+    herramientasCompradas.push_back(mm);
+    herramientasCompradas.push_back(mc);
+    Purshaced p = Purshaced(herramientasCompradas);
+
     return 0;
 }
