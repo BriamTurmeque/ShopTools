@@ -12,7 +12,7 @@ int comprobarIntDia();
 // catch: argumento invalido, no se que puede hacer
 
 //  la forma mas eficiente que pienso para poder hacer esta verificacion es con un try catch
-// usando al convertir el string a entero, y si me devuelve la excepcion decir que es un 
+// usando al convertir el string a entero, y si me devuelve la excepcion decir que es un
 // argumento invalido, y volver a pedirle el dato
 int comprobarIntDia(){
     int dia = 0;
@@ -43,7 +43,7 @@ int comprobarIntDia(){
 // sin la agregacion de herramientas
 class Buyer{
     string name, date, addres, phoneNumber;
-    float cost;  
+    float cost;
     private:
     Buyer(){
         name = date = addres = phoneNumber = "";
@@ -135,7 +135,7 @@ class Person{
     }
 };
 
-class PersonBuyer: virtual public Buyer,virtual public Person{ 
+class PersonBuyer: virtual public Buyer,virtual public Person{
     private:
 };
 class BusinessBuyer: virtual public Buyer,virtual public Person{
@@ -196,19 +196,15 @@ class Date{
 };
 
 // esta es la clase abstracta tools -> herramientas
-// esta va a ser la clase padre que va a heredar a todos los tipos de herramientas 
+// esta va a ser la clase padre que va a heredar a todos los tipos de herramientas
 // tenemos un metodo virtual llamado price, que lo vamos a tener que usar obligatoriamente
 // en todas las clases hijas de esta
-class Tools     
+class Tools
 {
-
-// ---------------------
-// falta añadir la asociacion de la fecha de compra, cuando se cree esa clase se va a crear la asociacion;
-// --------------------
     string name, funcion;
     float price;
     Date* fecha;
-public:
+    public:
     Tools()
     {
         name="";
@@ -250,11 +246,11 @@ public:
     virtual float Price()=0;
     friend ostream &operator << (ostream &salida, Tools &t)
     {
-        salida << t.getTipo() << "\nNombre: " << t.name << "\nFuncion: " << t.funcion << "\nPrecio: " << t.getPrice();
-        // tengo problemas al tratar de mostrar la fecha, ya tengo sobrecargado el cout para 
-        // mostrar las fechas, pero no me lo esta tomando, se arreglara proximamente 
+        salida << t.getTipo() << "\nNombre: " << t.name << "\nFuncion: " << t.funcion << "\nPrecio: " << t.Price();
+        // tengo problemas al tratar de mostrar la fecha, ya tengo sobrecargado el cout para
+        // mostrar las fechas, pero no me lo esta tomando, se arreglara proximamente
         // salida << "\nFecha de adquisicion: "; salida << fecha << endl;
-        salida << "\nFecha adquision(DD/MM/AAAA): " << t.fecha->getDia() << "/" << t.fecha->getMes() << "/" << t.fecha->getAnio() << endl;   
+        salida << "\nFecha adquision(DD/MM/AAAA): " << t.fecha->getDia() << "/" << t.fecha->getMes() << "/" << t.fecha->getAnio() << endl;
         return salida;
     }
 };
@@ -279,19 +275,33 @@ float Price() override {
 };
 class MechanicalTools:public Tools
 {
-string getTIpo(){return "Herramienta Mecanica";}
+    float iva;
+    public:
+    string getTipo() override{
+    return "Herramienta Mecanica";}
 
+    float Price() override {
+        float precio = getPrice() * (1 + iva);
+        return precio;}
+
+    MechanicalTools():Tools(){
+        iva = 0.19;
+    }
+    MechanicalTools(string name,string funcion, float price, Date* fecha,float iva): Tools(name,funcion,price,fecha){
+        MechanicalTools::iva = iva ;
+    };
 };
-
 
 
 int main (){
     system("cls");
-    Date* d = new Date(01,12,2003);
+    Date* fechaAdquision = new Date(01,12,2003);
     // estamos teniendo problemas con la creacion del objeto de ManualTools, proximamente lo arreglaremos
     // ManualTools m = ManualTools("martillo" , "martillar" , 20500 , d, 0.19);
-    
-    ManualTools* mm = new ManualTools("martillo" , "martillar" , 20500 , d , 0.19); 
-    cout << mm;
+    fflush(stdin);
+    ManualTools mm = ManualTools("martillo" , "martillar" , 10000 , fechaAdquision , 0.19);
+    cout << mm << endl << endl;
+    MechanicalTools mc = MechanicalTools ("carretilla" , "cargar con lo que se le de la gana" , 50000 , fechaAdquision , 0.19);
+    cout << mc;
     return 0;
 }
