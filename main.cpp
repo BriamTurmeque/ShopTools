@@ -55,7 +55,7 @@ class Buyer
 {
     string name, dateBorn, addres, phoneNumber;
     float cost;
-private:
+    public:
     Buyer()
     {
         name = dateBorn = addres = phoneNumber = "";
@@ -116,7 +116,7 @@ private:
 class Person
 {
     string name, dateBorn, nit, phoneNumber, addres;
-private:
+    public:
     Person()
     {
         name = dateBorn = nit = phoneNumber = addres = "";
@@ -177,23 +177,38 @@ private:
 // esta clase solo va a contener los datos que hereda y datos mas especificos de las personas, diferentes al comprador que es una empresa
 class PersonBuyer: virtual public Buyer,virtual public Person
 {
-
-private:
+    public:
+    PersonBuyer(): Buyer() , Person(){}
+    // PersonBuyer(string name, string dateBorn, string nit, string phoneNumber, string addres): Buyer(string name, string dateBorn, string phoneNumber, string addres) , Person(string nit){}
 };
 // esta clase va a contener los datos que hereda junto a otras mas especificos que son necesarios para el registro
 //los datos que maneja este "van a ser los mismos", los que hereda los vamos a trabajar como los del rep leg y le vamos a pedir otros
 //acerca de la empresa
 class BusinessBuyer: virtual public Buyer,virtual public Person
 {
+    string businessName, businessAddres, businessPhoneNumber, businessNit, businessEmailAddres;
+public:
 
-private:
+    // tengo una duda aqui, ya que ambos padres tienen los mismos datos, que datos le debo pasar en los constructores
+    BusinessBuyer(): Buyer() , Person(){}
+    // BusinessBuyer(string name, string dateBorn, string nit, string phoneNumber, string addres,
+    //     string businessName, string businessAddres, string businessPhoneNumber, string businessNit,
+    //     string businessEmailAdress): Buyer(name, dateBorn, addres, phoneNumber), Person(nit)
+    //       {
+    //         BusinessBuyer::businessName = businessName;
+    //         BusinessBuyer::businessAddres = businessAddres;
+    //         BusinessBuyer::businessPhoneNumber = businessPhoneNumber;
+    //         BusinessBuyer::businessNit = businessNit;
+    //         BusinessBuyer::businessEmailAddres = businessEmailAddres;    
+    //       }
+
 };
 
 class Date
 {
     int dia, mes, anio;
     string date;
-public:
+    public:
     Date()
     {
         dia = mes = anio = 0;
@@ -257,10 +272,8 @@ public:
 
 
 };
-
 class BornDate: public Date{
-
-public:
+    public:
     BornDate(): Date(){}
     BornDate(int dia, int mes, int anio):Date(dia,mes,anio){
         setDate(dia, mes, anio);
@@ -272,7 +285,7 @@ public:
 
 };
 class AdquisitionDate: public Date{
-public:
+    public:
     AdquisitionDate(): Date()
     {
     }
@@ -299,7 +312,7 @@ class Tools
     string name, funcion;
     float price;
     AdquisitionDate* fecha;
-public:
+    public:
     Tools()
     {
         name="";
@@ -355,7 +368,7 @@ public:
 class ManualTools:public Tools
 {
     float iva;
-public:
+    public:
     ManualTools():Tools()
     {
         ManualTools::iva = 0.19;
@@ -378,7 +391,7 @@ public:
 class MechanicalTools:public Tools
 {
     float iva;
-public:
+    public:
     string getTipo() override
     {
         return "Herramienta Mecanica";
