@@ -2,6 +2,9 @@
 
 using namespace std;
 
+// lo curioso es que me toca como numero a cualquier numero que no sobrepase los 10 digitos
+// si es igual o mayor ya lo desconoce como numero y dice que esta colocando texto
+
 int main (){
     system("cls");
     int numero;

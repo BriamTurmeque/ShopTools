@@ -187,7 +187,7 @@ class PersonBuyer: virtual public Buyer,virtual public Person
 class BusinessBuyer: virtual public Buyer,virtual public Person
 {
     string businessName, businessAddres, businessPhoneNumber, businessNit, businessEmailAddres;
-public:
+    public:
 
     // tengo una duda aqui, ya que ambos padres tienen los mismos datos, que datos le debo pasar en los constructores
     BusinessBuyer(): Buyer() , Person(){}
