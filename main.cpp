@@ -53,63 +53,8 @@ int comprobarIntDia()
 // sin la agregacion de herramientas
 class Buyer
 {
-    string name, dateBorn, addres, phoneNumber;
-    float cost;
-    public:
-    Buyer()
-    {
-        name = dateBorn = addres = phoneNumber = "";
-        cost = 0.0;
-    }
-    Buyer(string name, string dateBorn, string addres, string phoneNumber, float cost)
-    {
-        this->name = name;
-        this->dateBorn = dateBorn;
-        this->addres = addres;
-        this->phoneNumber = phoneNumber;
-        this->cost = cost;
-    }
+    // esta va a ser una clase interfaz, que solo va a tener metodos puros, con tal de cumplir requerimientos
 
-    string getName()
-    {
-        return name;
-    }
-    string getDateBorn()
-    {
-        return dateBorn;
-    }
-    string getAddres()
-    {
-        return addres;
-    }
-    string getPhoneNumber()
-    {
-        return phoneNumber;
-    }
-    float getCost()
-    {
-        return cost;
-    }
-    void setName(string name)
-    {
-        this->name = name;
-    }
-    void setDateBorn(string dateBorn)
-    {
-        this->dateBorn = dateBorn;
-    }
-    void setAddres(string addres)
-    {
-        this->addres = addres;
-    }
-    void setPhoneNumber(string phoneNumber)
-    {
-        this->phoneNumber = phoneNumber;
-    }
-    void setCost(float cost)
-    {
-        this->cost = cost;
-    }
 
 };
 
@@ -175,7 +120,7 @@ class Person
 // datos heredados por comprador: name, dateBorn, phoneNumber, addres;
 
 // esta clase solo va a contener los datos que hereda y datos mas especificos de las personas, diferentes al comprador que es una empresa
-class PersonBuyer: virtual public Buyer,virtual public Person
+class PersonBuyer: public Buyer, public Person
 {
     public:
     PersonBuyer(): Buyer() , Person(){}
@@ -184,7 +129,7 @@ class PersonBuyer: virtual public Buyer,virtual public Person
 // esta clase va a contener los datos que hereda junto a otras mas especificos que son necesarios para el registro
 //los datos que maneja este "van a ser los mismos", los que hereda los vamos a trabajar como los del rep leg y le vamos a pedir otros
 //acerca de la empresa
-class BusinessBuyer: virtual public Buyer,virtual public Person
+class BusinessBuyer: public Buyer, public Person
 {
     string businessName, businessAddres, businessPhoneNumber, businessNit, businessEmailAddres;
     public:
