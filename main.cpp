@@ -144,7 +144,7 @@ class BusinessBuyer: public Buyer, public Person
     //         BusinessBuyer::businessAddres = businessAddres;
     //         BusinessBuyer::businessPhoneNumber = businessPhoneNumber;
     //         BusinessBuyer::businessNit = businessNit;
-    //         BusinessBuyer::businessEmailAddres = businessEmailAddres;    
+    //         BusinessBuyer::businessEmailAddres = businessEmailAddres;
     //       }
 
 };
@@ -314,70 +314,108 @@ class ManualTools:public Tools
 {
     float iva;
     public:
-    ManualTools():Tools()
+ManualTools(string name,string funcion, float price,AdquisitionDate* fecha,float iva):Tools(name,funcion,price,fecha)
     {
-        ManualTools::iva = 0.19;
-    }
-    ManualTools(string name,string funcion, float price, AdquisitionDate* fecha,float iva): Tools(name,funcion,price,fecha)
-    {
-        ManualTools::iva = iva;
-    }
-    string getTipo() override
-    {
-        return "Herramienta manual";
-    }
+        ManualTools::iva=iva;
+    };
 
-    float Price() override
-    {
-        float precio = getPrice() * (1 + iva);
-        return precio;
-    }
+    string getTipo() override=0;
+
+    float Price() override=0;
+
 };
 class MechanicalTools:public Tools
 {
     float iva;
     public:
-    string getTipo() override
+    MechanicalTools(string name,string funcion, float price,AdquisitionDate* fecha,float iva):Tools(name,funcion,price,fecha)
     {
-        return "Herramienta Mecanica";
-    }
-
-    float Price() override
-    {
-        float precio = getPrice() * (1 + iva);
-        return precio;
-    }
-
-    MechanicalTools():Tools()
-    {
-        iva = 0.19;
-    }
-    MechanicalTools(string name,string funcion, float price, AdquisitionDate* fecha,float iva): Tools(name,funcion,price,fecha)
-    {
-        MechanicalTools::iva = iva ;
+        MechanicalTools::iva=iva;
     };
+    virtual string getTipo()=0;
+    virtual float Price()=0;
 };
 //a
+class Destornillador: public ManualTools
+{
+    public:
+    Destornillador(string name,string funcion, float price,AdquisitionDate* fecha,float iva):ManualTools(name,funcion,price,fecha,iva)
+{
 
+}
+    string getTipo()
+    {
+        return "Herramienta Manual\nDestornillador:";
+    }
+    float Price()
+    {
+        return getPrice();
+    }
+    string print(){
+        string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
+        return salida;
+    }
+};
+class Taladro:public MechanicalTools
+{
+public:
+
+Taladro(string name,string funcion, float price,AdquisitionDate* fecha,float iva):MechanicalTools(name,funcion,price,fecha,iva)
+{
+
+}
+
+string getTipo()
+{
+    return "Herramienta Mecanica\nTaladro: ";
+}
+float Price()
+{
+    return getPrice();
+}
+string print(){
+        string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
+        return salida;
+    }
+};
 class Purshaced
 {
-    vector <Tools*> purshacedTools;
+    vector <ManualTools*> purshacedTools;
+    vector <MechanicalTools*> purshacedTools2;
+
 public:
     Purshaced()
     {
         purshacedTools = {};
     }
-    Purshaced(vector <Tools*> Tools)
+    Purshaced(vector <ManualTools*> Tools,vector <MechanicalTools*> Tools2)
     {
-        purshacedTools = Tools;
+    purshacedTools = Tools;
+    purshacedTools2 = Tools2;
     }
-    void agregarHerramientas(Tools* h)
+    void agregarHerramientas(ManualTools* h)
     {
         purshacedTools.push_back(h);
     }
+    void  print()
+    {
+        cout << "\n\nCompra Realizada: \n";
+        for (ManualTools* t: purshacedTools){
+            cout << "----------------\n" << endl;
+            cout << t << endl << endl;
+        cout << "----------------\n" << endl;
+        }
+        for (MechanicalTools* t: purshacedTools2){
+            cout << "----------------\n" << endl;
+            cout << t << endl << endl;
+        cout << "----------------\n" << endl;
+        }
+
+    }
     friend ostream &operator << (ostream &salida, Purshaced *p){
-        salida << "Compra Realizada: " << endl;
-        for (Tools* t: p->purshacedTools){
+        salida << "\nCompra Realizada: \n" << endl;
+        for (ManualTools* t: p->purshacedTools){
+
             salida << t << endl << endl;
         }
 
@@ -385,7 +423,7 @@ public:
         // {
         //     out << e << endl;
         // }
-        
+
         return salida;
     }
 
@@ -395,18 +433,25 @@ int main ()
 {
     system("cls");
     system("color f5");
-    vector <Tools*> herramientasCompradas = {};
+    vector <ManualTools*> herramientasCompradas1 = {};
+    vector <MechanicalTools*> herramientasCompradas2 = {};
 
     AdquisitionDate* fechaAdquision = new AdquisitionDate(01,12,2003);
-    ManualTools*  mm = new ManualTools("martillo", "martillar", 10000, fechaAdquision, 0.19);
-    MechanicalTools* mc = new MechanicalTools ("carretilla", "cargar con lo que se le de la gana", 50000, fechaAdquision, 0.19);
-    cout << mm << endl << endl << mc;
-    cout << endl << endl;
+    // ManualTools*  mm = new ManualTools("martillo", "martillar", 10000, fechaAdquision, 0.19);
+    // MechanicalTools* mc = new MechanicalTools ("carretilla", "cargar con lo que se le de la gana", 50000, fechaAdquision, 0.19);
+    // cout << mm << endl << endl << mc;
+    // cout << endl << endl;
     cout << fechaAdquision;
-    herramientasCompradas.push_back(mm);
-    herramientasCompradas.push_back(mc);
-    Purshaced* p = new Purshaced(herramientasCompradas);
-    cout << p;
+    // herramientasCompradas.push_back(mm);
+    // herramientasCompradas.push_back(mc);
+    Destornillador* D1=new Destornillador("a","quita tornillos xd",54000,fechaAdquision,19);
+    Taladro* T1=new Taladro("a","hace agujeros xd",10000,fechaAdquision,19);
+    cout<<endl << D1->print() << endl;
+    cout<<T1->print();
+    herramientasCompradas2.push_back(T1);
+    herramientasCompradas1.push_back(D1);
+    Purshaced p(herramientasCompradas1, herramientasCompradas2);
+    p.print();
 
     return 0;
 }
