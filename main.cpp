@@ -354,13 +354,13 @@ class Tools
 
     virtual string getTipo() = 0;
     virtual float Price()=0;
-    friend ostream &operator << (ostream &salida, Tools &t)
+    friend ostream &operator << (ostream &salida, Tools *t)
     {
-        salida << t.getTipo() << "\nNombre: " << t.name << "\nFuncion: " << t.funcion << "\nPrecio: " << t.Price() << endl;
+        salida << t->getTipo() << "\nNombre: " << t->name << "\nFuncion: " << t->funcion << "\nPrecio: " << t->Price() << endl;
         // tengo problemas al tratar de mostrar la fecha, ya tengo sobrecargado el cout para
         // mostrar las fechas, pero no me lo esta tomando, se arreglara proximamente
         // salida << "\nFecha de adquisicion: "; salida << fecha << endl;
-        salida << t.fecha;
+        salida << t->fecha;
         return salida;
     }
 };
@@ -414,40 +414,54 @@ class MechanicalTools:public Tools
 };
 
 
-// class Purshaced
-// {
-//     vector <Tools*> purshacedTools;
-// public:
-//     Purshaced()
-//     {
-//         purshacedTools = {};
-//     }
-//     purshacedTools(vector <Tools*> Tools)
-//     {
-//         purshacedTools = Tools;
-//     }
-//     void agregarHerramientas(Tools* h)
-//     {
-//         purshacedTools.push_back(h);
-//     }
+class Purshaced
+{
+    vector <Tools*> purshacedTools;
+public:
+    Purshaced()
+    {
+        purshacedTools = {};
+    }
+    Purshaced(vector <Tools*> Tools)
+    {
+        purshacedTools = Tools;
+    }
+    void agregarHerramientas(Tools* h)
+    {
+        purshacedTools.push_back(h);
+    }
+    friend ostream &operator << (ostream &salida, Purshaced *p){
+        salida << "Compra Realizada: " << endl;
+        for (Tools* t: p->purshacedTools){
+            salida << t << endl << endl;
+        }
 
-// };
+        // for (Estudiantes* e: a->estudiantes)
+        // {
+        //     out << e << endl;
+        // }
+        
+        return salida;
+    }
+
+};
 
 int main ()
 {
     system("cls");
     system("color f5");
-    // vector <Tools> herramientasCompradas = {};
+    vector <Tools*> herramientasCompradas = {};
 
     AdquisitionDate* fechaAdquision = new AdquisitionDate(01,12,2003);
-    ManualTools mm = ManualTools("martillo", "martillar", 10000, fechaAdquision, 0.19);
-    MechanicalTools mc = MechanicalTools ("carretilla", "cargar con lo que se le de la gana", 50000, fechaAdquision, 0.19);
+    ManualTools*  mm = new ManualTools("martillo", "martillar", 10000, fechaAdquision, 0.19);
+    MechanicalTools* mc = new MechanicalTools ("carretilla", "cargar con lo que se le de la gana", 50000, fechaAdquision, 0.19);
     cout << mm << endl << endl << mc;
     cout << endl << endl;
     cout << fechaAdquision;
-    // herramientasCompradas.push_back(mm);
-    // herramientasCompradas.push_back(mc);
-    // Purshaced p = Purshaced(herramientasCompradas);
+    herramientasCompradas.push_back(mm);
+    herramientasCompradas.push_back(mc);
+    Purshaced* p = new Purshaced(herramientasCompradas);
+    cout << p;
 
     return 0;
 }
