@@ -53,18 +53,18 @@ int comprobarIntDia()
 // sin la agregacion de herramientas
 class Buyer
 {
-    string name, date, addres, phoneNumber;
+    string name, dateBorn, addres, phoneNumber;
     float cost;
 private:
     Buyer()
     {
-        name = date = addres = phoneNumber = "";
+        name = dateBorn = addres = phoneNumber = "";
         cost = 0.0;
     }
-    Buyer(string name, string date, string addres, string phoneNumber, float cost)
+    Buyer(string name, string dateBorn, string addres, string phoneNumber, float cost)
     {
         this->name = name;
-        this->date = date;
+        this->dateBorn = dateBorn;
         this->addres = addres;
         this->phoneNumber = phoneNumber;
         this->cost = cost;
@@ -74,9 +74,9 @@ private:
     {
         return name;
     }
-    string getDate()
+    string getDateBorn()
     {
-        return date;
+        return dateBorn;
     }
     string getAddres()
     {
@@ -94,9 +94,9 @@ private:
     {
         this->name = name;
     }
-    void setDate(string date)
+    void setDateBorn(string dateBorn)
     {
-        this->date = date;
+        this->dateBorn = dateBorn;
     }
     void setAddres(string addres)
     {
@@ -115,18 +115,18 @@ private:
 
 class Person
 {
-    string name, dateBorn, nit, cel, addres;
+    string name, dateBorn, nit, phoneNumber, addres;
 private:
     Person()
     {
-        name = dateBorn = nit = cel = addres = "";
+        name = dateBorn = nit = phoneNumber = addres = "";
     }
-    Person(string name, string dateBorn, string nit, string cel, string addres)
+    Person(string name, string dateBorn, string nit, string phoneNumber, string addres)
     {
         this->name = name;
         this->dateBorn = dateBorn;
         this->nit = nit;
-        this->cel = cel;
+        this->phoneNumber = phoneNumber;
         this->addres = addres;
     }
     string getName()
@@ -141,9 +141,9 @@ private:
     {
         return nit;
     }
-    string getCel()
+    string getPhoneNumber()
     {
-        return cel;
+        return phoneNumber;
     }
     string getAddres()
     {
@@ -161,9 +161,9 @@ private:
     {
         this->nit = nit;
     }
-    void setCel(string cel)
+    void setPhoneNumber(string phoneNumber)
     {
-        this->cel = cel;
+        this->phoneNumber = phoneNumber;
     }
     void setAddres(string addres)
     {
@@ -171,14 +171,21 @@ private:
     }
 };
 
+// datos heredados por persona: name, dateBorn, nit, phoneNumber, addres;
+// datos heredados por comprador: name, dateBorn, phoneNumber, addres;
+
 // esta clase solo va a contener los datos que hereda y datos mas especificos de las personas, diferentes al comprador que es una empresa
 class PersonBuyer: virtual public Buyer,virtual public Person
 {
+
 private:
 };
 // esta clase va a contener los datos que hereda junto a otras mas especificos que son necesarios para el registro
+//los datos que maneja este "van a ser los mismos", los que hereda los vamos a trabajar como los del rep leg y le vamos a pedir otros
+//acerca de la empresa
 class BusinessBuyer: virtual public Buyer,virtual public Person
 {
+
 private:
 };
 
@@ -231,9 +238,10 @@ public:
     {
         date = to_string(dia) + "/" + to_string(mes) + "/" + to_string(anio);
     }
-    friend ostream &operator << (ostream &salida, Date &d)
+    virtual string tipoFecha() = 0;
+    friend ostream &operator << (ostream &salida, Date *d)
     {
-        salida << "la fecha es (dd/mm/aaaa): " <<  d.getDate();
+        salida << d->tipoFecha() << " (DD/MM/AAAA): " <<  d->getDate();
         return salida;
     }
     friend istream &operator >> (istream &entrada, Date &d)
@@ -250,6 +258,38 @@ public:
 
 };
 
+class BornDate: public Date{
+
+public:
+    BornDate(): Date(){}
+    BornDate(int dia, int mes, int anio):Date(dia,mes,anio){
+        setDate(dia, mes, anio);
+    }
+    string tipoFecha() override{
+        return "Fecha de Nacimiento";
+    }
+
+
+};
+class AdquisitionDate: public Date{
+public:
+    AdquisitionDate(): Date()
+    {
+    }
+    AdquisitionDate(int dia, int mes, int anio):Date(dia,mes,anio)
+    {
+        setDate(dia,mes,anio);
+    }
+    string getTipo(){
+    return "Adquisicion";
+    }
+    string tipoFecha() override{
+        return "Fecha de Adquisicion";
+    }
+};
+
+
+
 // esta es la clase abstracta tools -> herramientas
 // esta va a ser la clase padre que va a heredar a todos los tipos de herramientas
 // tenemos un metodo virtual llamado price, que lo vamos a tener que usar obligatoriamente
@@ -258,16 +298,16 @@ class Tools
 {
     string name, funcion;
     float price;
-    Date* fecha;
+    AdquisitionDate* fecha;
 public:
     Tools()
     {
         name="";
         funcion="";
         price=0.0;
-        fecha = new Date();
+        fecha = new AdquisitionDate();
     }
-    Tools(string name,string funcion, float price, Date* fecha)
+    Tools(string name,string funcion, float price, AdquisitionDate* fecha)
     {
         Tools::name=name;
         Tools::name=funcion;
@@ -303,11 +343,11 @@ public:
     virtual float Price()=0;
     friend ostream &operator << (ostream &salida, Tools &t)
     {
-        salida << t.getTipo() << "\nNombre: " << t.name << "\nFuncion: " << t.funcion << "\nPrecio: " << t.Price();
+        salida << t.getTipo() << "\nNombre: " << t.name << "\nFuncion: " << t.funcion << "\nPrecio: " << t.Price() << endl;
         // tengo problemas al tratar de mostrar la fecha, ya tengo sobrecargado el cout para
         // mostrar las fechas, pero no me lo esta tomando, se arreglara proximamente
         // salida << "\nFecha de adquisicion: "; salida << fecha << endl;
-        salida << "\nFecha adquision(DD/MM/AAAA): " << t.fecha->getDia() << "/" << t.fecha->getMes() << "/" << t.fecha->getAnio() << endl;
+        salida << t.fecha;
         return salida;
     }
 };
@@ -320,7 +360,7 @@ public:
     {
         ManualTools::iva = 0.19;
     }
-    ManualTools(string name,string funcion, float price, Date* fecha,float iva): Tools(name,funcion,price,fecha)
+    ManualTools(string name,string funcion, float price, AdquisitionDate* fecha,float iva): Tools(name,funcion,price,fecha)
     {
         ManualTools::iva = iva;
     }
@@ -354,31 +394,31 @@ public:
     {
         iva = 0.19;
     }
-    MechanicalTools(string name,string funcion, float price, Date* fecha,float iva): Tools(name,funcion,price,fecha)
+    MechanicalTools(string name,string funcion, float price, AdquisitionDate* fecha,float iva): Tools(name,funcion,price,fecha)
     {
         MechanicalTools::iva = iva ;
     };
 };
 
 
-class Purshaced
-{
-    vector <Tools*> purshacedTools;
-public:
-    Purshaced()
-    {
-        purshacedTools = {};
-    }
-    purshacedTools(vector <Tools*> Tools)
-    {
-        purshacedTools = Tools;
-    }
-    void agregarHerramientas(Tools* h)
-    {
-        purshacedTools.push_back(h);
-    }
+// class Purshaced
+// {
+//     vector <Tools*> purshacedTools;
+// public:
+//     Purshaced()
+//     {
+//         purshacedTools = {};
+//     }
+//     purshacedTools(vector <Tools*> Tools)
+//     {
+//         purshacedTools = Tools;
+//     }
+//     void agregarHerramientas(Tools* h)
+//     {
+//         purshacedTools.push_back(h);
+//     }
 
-};
+// };
 
 int main ()
 {
@@ -386,10 +426,12 @@ int main ()
     system("color f5");
     // vector <Tools> herramientasCompradas = {};
 
-    Date* fechaAdquision = new Date(01,12,2003);
+    AdquisitionDate* fechaAdquision = new AdquisitionDate(01,12,2003);
     ManualTools mm = ManualTools("martillo", "martillar", 10000, fechaAdquision, 0.19);
     MechanicalTools mc = MechanicalTools ("carretilla", "cargar con lo que se le de la gana", 50000, fechaAdquision, 0.19);
     cout << mm << endl << endl << mc;
+    cout << endl << endl;
+    cout << fechaAdquision;
     // herramientasCompradas.push_back(mm);
     // herramientasCompradas.push_back(mc);
     // Purshaced p = Purshaced(herramientasCompradas);
