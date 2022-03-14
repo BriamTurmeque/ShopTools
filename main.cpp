@@ -314,6 +314,10 @@ class ManualTools:public Tools
 {
     float iva;
     public:
+    ManualTools()
+    {
+
+    }
 ManualTools(string name,string funcion, float price,AdquisitionDate* fecha,float iva):Tools(name,funcion,price,fecha)
     {
         ManualTools::iva=iva;
@@ -328,6 +332,10 @@ class MechanicalTools:public Tools
 {
     float iva;
     public:
+    MechanicalTools()
+    {
+        iva=0;
+    }
     MechanicalTools(string name,string funcion, float price,AdquisitionDate* fecha,float iva):Tools(name,funcion,price,fecha)
     {
         MechanicalTools::iva=iva;
@@ -339,6 +347,10 @@ class MechanicalTools:public Tools
 class Destornillador: public ManualTools
 {
     public:
+    Destornillador(): ManualTools()
+    {
+
+    }
     Destornillador(string name,string funcion, float price,AdquisitionDate* fecha,float iva):ManualTools(name,funcion,price,fecha,iva)
 {
 
@@ -356,10 +368,62 @@ class Destornillador: public ManualTools
         return salida;
     }
 };
+class Tijeras: public ManualTools
+{
+public:
+    Tijeras(): ManualTools()
+    {
+
+    }
+    Tijeras(string name,string funcion, float price,AdquisitionDate* fecha,float iva):ManualTools(name,funcion,price,fecha,iva)
+    {
+
+    }
+    string getTipo()
+    {
+        return "Herramienta Manual\nTijeras:";
+    }
+    float Price()
+    {
+        return getPrice();
+    }
+    string print(){
+        string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
+        return salida;
+    }
+};
+class Pinzas: public ManualTools
+{
+public:
+    Pinzas(): ManualTools()
+    {
+
+    }
+    Pinzas(string name,string funcion, float price,AdquisitionDate* fecha,float iva):ManualTools(name,funcion,price,fecha,iva)
+    {
+
+    }
+    string getTipo()
+    {
+        return "Herramienta Manual\nPinzas:";
+    }
+    float Price()
+    {
+        return getPrice();
+    }
+    string print(){
+
+        string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
+        return salida;
+    }
+};
 class Taladro:public MechanicalTools
 {
 public:
+Taladro():MechanicalTools()
+{
 
+}
 Taladro(string name,string funcion, float price,AdquisitionDate* fecha,float iva):MechanicalTools(name,funcion,price,fecha,iva)
 {
 
@@ -374,6 +438,56 @@ float Price()
     return getPrice();
 }
 string print(){
+        string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
+        return salida;
+    }
+};
+class Motosierra:public MechanicalTools
+{
+public:
+    Motosierra():MechanicalTools()
+    {
+
+    }
+    Motosierra(string name,string funcion, float price,AdquisitionDate* fecha,float iva):MechanicalTools(name,funcion,price,fecha,iva)
+    {
+
+    }
+
+    string getTipo()
+    {
+        return "Herramienta Mecanica\nMotosierra: ";
+    }
+    float Price()
+    {
+        return getPrice();
+    }
+    string print(){
+        string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
+        return salida;
+    }
+};
+class Pulidora: public MechanicalTools
+{
+public:
+    Pulidora(): MechanicalTools()
+    {
+
+    }
+    Pulidora(string name,string funcion, float price,AdquisitionDate* fecha,float iva):MechanicalTools(name,funcion,price,fecha,iva)
+    {
+
+    }
+
+    string getTipo()
+    {
+        return "Herramienta Mecanica\nTaladro: ";
+    }
+    float Price()
+    {
+        return getPrice();
+    }
+    string print(){
         string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
         return salida;
     }
@@ -444,12 +558,20 @@ int main ()
     cout << fechaAdquision;
     // herramientasCompradas.push_back(mm);
     // herramientasCompradas.push_back(mc);
-    Destornillador* D1=new Destornillador("a","quita tornillos xd",54000,fechaAdquision,19);
-    Taladro* T1=new Taladro("a","hace agujeros xd",10000,fechaAdquision,19);
+    Destornillador* D1=new Destornillador("Destornillador Philips","quita tornillos",23500,fechaAdquision,19);
+    Tijeras* Tj1=new Tijeras("Tijeras magicas","Corta con precision",5400,fechaAdquision,19);
+    Pinzas* Pz1=new Pinzas("Pinzas de Precision","Ayuda a la manipulacion de objetos pequeños",12000,fechaAdquision,19);
+    Taladro* T1=new Taladro("Taladro Serie 54-6","hace agujeros",130000,fechaAdquision,19);
+    Motosierra* M1=new Motosierra("Tala-Arboles MK 2.0","Corta madera con gran potencia y precision",546780.50,fechaAdquision,19);
+    Pulidora* P1=new Pulidora("Pulidora Max 3000","Aliza superficies metalicas",560000,fechaAdquision,19);
     cout<<endl << D1->print() << endl;
     cout<<T1->print();
     herramientasCompradas2.push_back(T1);
+    herramientasCompradas2.push_back(M1);
+    herramientasCompradas2.push_back(P1);
     herramientasCompradas1.push_back(D1);
+    herramientasCompradas1.push_back(Tj1);
+    herramientasCompradas1.push_back(Pz1);
     Purshaced p(herramientasCompradas1, herramientasCompradas2);
     p.print();
 
