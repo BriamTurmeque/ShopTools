@@ -246,8 +246,6 @@ class AdquisitionDate: public Date{
     }
 };
 
-
-
 // esta es la clase abstracta tools -> herramientas
 // esta va a ser la clase padre que va a heredar a todos los tipos de herramientas
 // tenemos un metodo virtual llamado price, que lo vamos a tener que usar obligatoriamente
@@ -309,7 +307,6 @@ class Tools
         return salida;
     }
 };
-
 class ManualTools:public Tools
 {
     float iva;
@@ -343,7 +340,6 @@ class MechanicalTools:public Tools
     virtual string getTipo()=0;
     virtual float Price()=0;
 };
-//a
 class Destornillador: public ManualTools
 {
     public:
