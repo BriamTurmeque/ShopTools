@@ -6,14 +6,6 @@
 using namespace std;
 int comprobarIntDia();
 
-
-
-// creo que con el try catch tampoco se puede por que tengo el mismo problema
-// catch: argumento invalido, no se que puede hacer
-
-//  la forma mas eficiente que pienso para poder hacer esta verificacion es con un try catch
-// usando al convertir el string a entero, y si me devuelve la excepcion decir que es un
-// argumento invalido, y volver a pedirle el dato
 int comprobarIntDia()
 {
     int dia = 0;
@@ -45,14 +37,14 @@ int comprobarIntDia()
             cin >> dia2;
         }
     }
-
     return dia;
 }
 
-class Date{
+class Date
+{
     int dia, mes, anio;
     string date;
-    public:
+public:
     Date()
     {
         dia = mes = anio = 0;
@@ -113,51 +105,47 @@ class Date{
         d.setDate(d.dia, d.mes, d.anio);
         return entrada;
     }
-
-
 };
-class BornDate: public Date{
-    public:
-    BornDate(): Date(){}
-    BornDate(int dia, int mes, int anio):Date(dia,mes,anio){
+class BornDate: public Date
+{
+public:
+    BornDate(): Date() {}
+    BornDate(int dia, int mes, int anio):Date(dia,mes,anio)
+    {
         setDate(dia, mes, anio);
     }
-    string tipoFecha() override{
+    string tipoFecha() override
+    {
         return "Fecha de Nacimiento";
     }
-
-
 };
-class AdquisitionDate: public Date{
-    public:
-    AdquisitionDate(): Date()
-    {
-    }
+class AdquisitionDate: public Date
+{
+public:
+    AdquisitionDate(): Date(){}
     AdquisitionDate(int dia, int mes, int anio):Date(dia,mes,anio)
     {
         setDate(dia,mes,anio);
     }
-    string getTipo(){
-    return "Adquisicion";
+    string getTipo()
+    {
+        return "Adquisicion";
     }
-    string tipoFecha() override{
+    string tipoFecha() override
+    {
         return "Fecha de Adquisicion";
     }
 };
-// creacion de la clase comprador sin la asociacion a la otra clase,
-// sin la agregacion de herramientas
 class Buyer
 {
-    // esta va a ser una clase interfaz, que solo va a tener metodos puros, con tal de cumplir requerimientos
-    public:
+public:
     virtual int getAnios() = 0;
 };
-
 class Person
 {
     string name, nit, phoneNumber, addres;
     BornDate* fechaNacimiento;
-    public:
+public:
     Person()
     {
         name = nit = phoneNumber = addres = "";
@@ -206,93 +194,107 @@ class Person
     virtual string getTipo() = 0;
 
 
-    friend ostream &operator << (ostream &salida, Person *p){
-    salida << p->getTipo() << endl << "Nombre: " << p->name << "\nFecha de nacimiento: " << p->fechaNacimiento->getDate() << "\nCedula: " << p->nit;
-    salida << "\nTelefono: " << p->phoneNumber << "\nDireccion Email: " << p->addres << endl;
-    return salida;
+    friend ostream &operator << (ostream &salida, Person *p)
+    {
+        salida << p->getTipo() << endl << "Nombre: " << p->name << "\nFecha de nacimiento: " << p->fechaNacimiento->getDate() << "\nCedula: " << p->nit;
+        salida << "\nTelefono: " << p->phoneNumber << "\nDireccion Email: " << p->addres << endl;
+        return salida;
     }
 };
-
-// datos heredados por persona: name, dateBorn, nit, phoneNumber, addres;
-// datos heredados por comprador: name, dateBorn, phoneNumber, addres;
-
-// esta clase solo va a contener los datos que hereda y datos mas especificos de las personas, diferentes al comprador que es una empresa
 class PersonBuyer: public Buyer, public Person
 {
-    public:
-    PersonBuyer(): Person(){}
-    PersonBuyer(string name, BornDate* fechaNacimiento, string nit, string phoneNumber, string addres): Person(name,fechaNacimiento,nit,phoneNumber,addres){}
+public:
+    PersonBuyer(): Person() {}
+    PersonBuyer(string name, BornDate* fechaNacimiento, string nit, string phoneNumber, string addres): Person(name,fechaNacimiento,nit,phoneNumber,addres) {}
     // falta hacer una implementacion mas realista de este metodo obligatoria.
-    int getAnios() override {
+    int getAnios() override
+    {
         int anios = 10 ;
         return anios;
     }
-    string getTipo()override{
-    return "Comprador: Persona";}
+    string getTipo()override
+    {
+        return "Comprador: Persona";
+    }
 };
-// esta clase va a contener los datos que hereda junto a otras mas especificos que son necesarios para el registro
-//los datos que maneja este "van a ser los mismos", los que hereda los vamos a trabajar como los del rep leg y le vamos a pedir otros
-//acerca de la empresa
 class BusinessBuyer: public Person, public Buyer
 {
     string businessName, businessAddres, businessPhoneNumber, businessNit, businessEmailAddres;
     BornDate* fechaNacimientoBusiness;
-    public:
+public:
 
     // tengo una duda aqui, ya que ambos padres tienen los mismos datos, que datos le debo pasar en los constructores
-    BusinessBuyer(): Person(){}
+    BusinessBuyer(): Person() {}
     BusinessBuyer(string name, BornDate* fechaNacimiento, string nit, string phoneNumber, string addres,
-        string businessName, string businessAddres, string businessPhoneNumber, string businessNit,
-        string businessEmailAddres, BornDate* fechaNacimientoBusiness ): Person(name, fechaNacimiento, nit, phoneNumber, addres)
-          {
-            BusinessBuyer::businessName = businessName;
-            BusinessBuyer::businessAddres = businessAddres;
-            BusinessBuyer::businessPhoneNumber = businessPhoneNumber;
-            BusinessBuyer::businessNit = businessNit;
-            BusinessBuyer::businessEmailAddres = businessEmailAddres;
-            BusinessBuyer::fechaNacimientoBusiness = fechaNacimientoBusiness;
-          }
-    int getAnios() override {
-    int anios = 20;
-    return anios;
+                  string businessName, string businessAddres, string businessPhoneNumber, string businessNit,
+                  string businessEmailAddres, BornDate* fechaNacimientoBusiness ): Person(name, fechaNacimiento, nit, phoneNumber, addres)
+    {
+        BusinessBuyer::businessName = businessName;
+        BusinessBuyer::businessAddres = businessAddres;
+        BusinessBuyer::businessPhoneNumber = businessPhoneNumber;
+        BusinessBuyer::businessNit = businessNit;
+        BusinessBuyer::businessEmailAddres = businessEmailAddres;
+        BusinessBuyer::fechaNacimientoBusiness = fechaNacimientoBusiness;
     }
-    string getTipo()override{
+    int getAnios() override
+    {
+        int anios = 20;
+        return anios;
+    }
+    string getTipo()override
+    {
         string salida;
         salida = "_________________\n\nComprador: Empresa\n_________________\n\nDatos Basicos Empresa:\nNombre Empresa: " + businessName + "\nDireccion: " + businessAddres + "\nDireccion de email: " + businessEmailAddres + "\nNit Empresarial: " + businessNit + "\nNumero de contacto: " + businessPhoneNumber + "\n\nDatos Basicos:";
-        return salida;}
+        return salida;
+    }
 
-    string getBusinessName(){
-    return businessName;}
-    string getdBusinessAddres(){
-    return businessAddres;}
-    string getBusinessPhoneNumber(){
-    return businessPhoneNumber;}
-    string getBusinessNit(){
-    return businessNit;}
-    string getBusinessEmailAddres(){
-    return businessEmailAddres;}
-    void setBusinessName(string businessName){
-    this->businessName = businessName;}
-    void setBusinessAddres(string businessAddres){
-    this->businessAddres = businessAddres;}
-    void setBusinessPhoneNumber(string businessPhoneNumber){
-    this->businessPhoneNumber = businessPhoneNumber;}
-    void setBusinessNit(string nit){
-    setNit(nit);}
-    void setBusinessEmailAddres(string businessEmailAddres){
-    this->businessEmailAddres = businessEmailAddres;}
+    string getBusinessName()
+    {
+        return businessName;
+    }
+    string getdBusinessAddres()
+    {
+        return businessAddres;
+    }
+    string getBusinessPhoneNumber()
+    {
+        return businessPhoneNumber;
+    }
+    string getBusinessNit()
+    {
+        return businessNit;
+    }
+    string getBusinessEmailAddres()
+    {
+        return businessEmailAddres;
+    }
+    void setBusinessName(string businessName)
+    {
+        this->businessName = businessName;
+    }
+    void setBusinessAddres(string businessAddres)
+    {
+        this->businessAddres = businessAddres;
+    }
+    void setBusinessPhoneNumber(string businessPhoneNumber)
+    {
+        this->businessPhoneNumber = businessPhoneNumber;
+    }
+    void setBusinessNit(string nit)
+    {
+        setNit(nit);
+    }
+    void setBusinessEmailAddres(string businessEmailAddres)
+    {
+        this->businessEmailAddres = businessEmailAddres;
+    }
 };
-
-// esta es la clase abstracta tools -> herramientas
-// esta va a ser la clase padre que va a heredar a todos los tipos de herramientas
-// tenemos un metodo virtual llamado price, que lo vamos a tener que usar obligatoriamente
-// en todas las clases hijas de esta
 class Tools
 {
     string name, funcion;
     float price;
     AdquisitionDate* fecha;
-    public:
+public:
     Tools()
     {
         name="";
@@ -331,15 +333,11 @@ class Tools
     {
         Tools::funcion=funcion;
     }
-
     virtual string getTipo() = 0;
     virtual float Price()=0;
     friend ostream &operator << (ostream &salida, Tools *t)
     {
         salida << t->getTipo() << "\nNombre: " << t->name << "\nFuncion: " << t->funcion << "\nPrecio: " << t->Price() << endl;
-        // tengo problemas al tratar de mostrar la fecha, ya tengo sobrecargado el cout para
-        // mostrar las fechas, pero no me lo esta tomando, se arreglara proximamente
-        // salida << "\nFecha de adquisicion: "; salida << fecha << endl;
         salida << t->fecha;
         return salida;
     }
@@ -347,11 +345,8 @@ class Tools
 class ManualTools:public Tools
 {
     float iva;
-    public:
-    ManualTools()
-    {
-
-    }
+public:
+    ManualTools(){}
     ManualTools(string name,string funcion, float price,AdquisitionDate* fecha,float iva):Tools(name,funcion,price,fecha)
     {
         ManualTools::iva=iva;
@@ -365,7 +360,7 @@ class ManualTools:public Tools
 class MechanicalTools:public Tools
 {
     float iva;
-    public:
+public:
     MechanicalTools()
     {
         iva=0;
@@ -379,12 +374,9 @@ class MechanicalTools:public Tools
 };
 class Destornillador: public ManualTools
 {
-    public:
-    Destornillador(): ManualTools()
-    {
-
-    }
-    Destornillador(string name,string funcion, float price,AdquisitionDate* fecha,float iva):ManualTools(name,funcion,price,fecha,iva){}
+public:
+    Destornillador(): ManualTools(){}
+    Destornillador(string name,string funcion, float price,AdquisitionDate* fecha,float iva):ManualTools(name,funcion,price,fecha,iva) {}
     string getTipo()
     {
         return "Herramienta Manual\nDestornillador:";
@@ -393,22 +385,17 @@ class Destornillador: public ManualTools
     {
         return getPrice();
     }
-    string print(){
+    string print()
+    {
         string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
         return salida;
     }
 };
 class Tijeras: public ManualTools
 {
-    public:
-    Tijeras(): ManualTools()
-    {
-
-    }
-    Tijeras(string name,string funcion, float price,AdquisitionDate* fecha,float iva):ManualTools(name,funcion,price,fecha,iva)
-    {
-
-    }
+public:
+    Tijeras(): ManualTools(){}
+    Tijeras(string name,string funcion, float price,AdquisitionDate* fecha,float iva):ManualTools(name,funcion,price,fecha,iva){}
     string getTipo()
     {
         return "Herramienta Manual\nTijeras:";
@@ -417,22 +404,17 @@ class Tijeras: public ManualTools
     {
         return getPrice();
     }
-    string print(){
+    string print()
+    {
         string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
         return salida;
     }
 };
 class Pinzas: public ManualTools
 {
-    public:
-    Pinzas(): ManualTools()
-    {
-
-    }
-    Pinzas(string name,string funcion, float price,AdquisitionDate* fecha,float iva):ManualTools(name,funcion,price,fecha,iva)
-    {
-
-    }
+public:
+    Pinzas(): ManualTools(){}
+    Pinzas(string name,string funcion, float price,AdquisitionDate* fecha,float iva):ManualTools(name,funcion,price,fecha,iva){}
     string getTipo()
     {
         return "Herramienta Manual\nPinzas:";
@@ -441,7 +423,8 @@ class Pinzas: public ManualTools
     {
         return getPrice();
     }
-    string print(){
+    string print()
+    {
 
         string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
         return salida;
@@ -449,15 +432,9 @@ class Pinzas: public ManualTools
 };
 class Taladro:public MechanicalTools
 {
-    public:
-    Taladro():MechanicalTools()
-    {
-
-    }
-    Taladro(string name,string funcion, float price,AdquisitionDate* fecha,float iva):MechanicalTools(name,funcion,price,fecha,iva)
-    {
-
-    }
+public:
+    Taladro():MechanicalTools(){}
+    Taladro(string name,string funcion, float price,AdquisitionDate* fecha,float iva):MechanicalTools(name,funcion,price,fecha,iva){}
 
     string getTipo()
     {
@@ -467,22 +444,17 @@ class Taladro:public MechanicalTools
     {
         return getPrice();
     }
-    string print(){
-            string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
-            return salida;
-        }
+    string print()
+    {
+        string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
+        return salida;
+    }
 };
 class Motosierra:public MechanicalTools
 {
-    public:
-    Motosierra():MechanicalTools()
-    {
-
-    }
-    Motosierra(string name,string funcion, float price,AdquisitionDate* fecha,float iva):MechanicalTools(name,funcion,price,fecha,iva)
-    {
-
-    }
+public:
+    Motosierra():MechanicalTools(){}
+    Motosierra(string name,string funcion, float price,AdquisitionDate* fecha,float iva):MechanicalTools(name,funcion,price,fecha,iva){}
 
     string getTipo()
     {
@@ -492,7 +464,8 @@ class Motosierra:public MechanicalTools
     {
         return getPrice();
     }
-    string print(){
+    string print()
+    {
         string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
         return salida;
     }
@@ -500,15 +473,8 @@ class Motosierra:public MechanicalTools
 class Pulidora: public MechanicalTools
 {
 public:
-    Pulidora(): MechanicalTools()
-    {
-
-    }
-    Pulidora(string name,string funcion, float price,AdquisitionDate* fecha,float iva):MechanicalTools(name,funcion,price,fecha,iva)
-    {
-
-    }
-
+    Pulidora(): MechanicalTools(){}
+    Pulidora(string name,string funcion, float price,AdquisitionDate* fecha,float iva):MechanicalTools(name,funcion,price,fecha,iva){}
     string getTipo()
     {
         return "Herramienta Mecanica\nTaladro: ";
@@ -517,7 +483,8 @@ public:
     {
         return getPrice();
     }
-    string print(){
+    string print()
+    {
         string salida = getTipo() + "\nNombre: " + getName() + "\nFuncion: " + getFuncion() + "\nPrecio: " + to_string(Price());
         return salida;
     }
@@ -529,7 +496,7 @@ class Purshaced
     BusinessBuyer* comprador;
     AdquisitionDate* fechaCompra;
 
-    public:
+public:
     Purshaced()
     {
         purshacedTools = {};
@@ -539,10 +506,10 @@ class Purshaced
     }
     Purshaced(vector <ManualTools*> Tools,vector <MechanicalTools*> Tools2, BusinessBuyer* comprador, AdquisitionDate* fechaCompra)
     {
-    this->fechaCompra = fechaCompra;
-    this->comprador = comprador;
-    purshacedTools = Tools;
-    purshacedTools2 = Tools2;
+        this->fechaCompra = fechaCompra;
+        this->comprador = comprador;
+        purshacedTools = Tools;
+        purshacedTools2 = Tools2;
     }
     void agregarHerramientas(ManualTools* h)
     {
@@ -553,26 +520,23 @@ class Purshaced
         cout << comprador << "\n_________________\n";
         cout << fechaCompra << "\n_________________\n";
         cout << "\n\nHerramientas compradas: \n";
-        for (ManualTools* t: purshacedTools){
+        for (ManualTools* t: purshacedTools)
+        {
             cout << t << endl << endl;
         }
-        for (MechanicalTools* t: purshacedTools2){
+        for (MechanicalTools* t: purshacedTools2)
+        {
             cout << t << endl << endl;
         }
-
     }
-    friend ostream &operator << (ostream &salida, Purshaced *p){
+    friend ostream &operator << (ostream &salida, Purshaced *p)
+    {
         salida << "\nCompra Realizada: \n" << endl;
-        for (ManualTools* t: p->purshacedTools){
+        for (ManualTools* t: p->purshacedTools)
+        {
 
             salida << t << endl << endl;
         }
-
-        // for (Estudiantes* e: a->estudiantes)
-        // {
-        //     out << e << endl;
-        // }
-
         return salida;
     }
 
@@ -608,11 +572,11 @@ int main ()
     herramientasCompradas1.push_back(D1);
     herramientasCompradas1.push_back(Tj1);
     herramientasCompradas1.push_back(Pz1);
-    PersonBuyer* comprador = new PersonBuyer("Alejandro" , fechaNacimiento , "1118528444" , "3227062807" , "turmequeroldanbriam@gmail.com" );
-    BusinessBuyer* compradorEmpresa = new BusinessBuyer("Briam Turmeque" , fechaNacimiento ,
-                                    "1118528444" , "3227062807" , "turmequeroldanbriam@gmial.com" ,
-                                    "Avicultora GYR" , "Villavicencio_Meta" , "3227062807" , "1118528444" ,
-                                    "avicultoraGYR@gmail.com",fechaNacimiento);
+    PersonBuyer* comprador = new PersonBuyer("Alejandro", fechaNacimiento, "1118528444", "3227062807", "turmequeroldanbriam@gmail.com" );
+    BusinessBuyer* compradorEmpresa = new BusinessBuyer("Briam Turmeque", fechaNacimiento,
+            "1118528444", "3227062807", "turmequeroldanbriam@gmial.com",
+            "Avicultora GYR", "Villavicencio_Meta", "3227062807", "1118528444",
+            "avicultoraGYR@gmail.com",fechaNacimiento);
     Purshaced p(herramientasCompradas1, herramientasCompradas2, compradorEmpresa,fechaAdquision);
     p.print();
     //cout << comprador << endl << endl;
